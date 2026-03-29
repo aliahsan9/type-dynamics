@@ -1,1 +1,83 @@
-<p>game works!</p>
+<div class="game-container" [class.shake]="screenShake">
+  <div class="space-bg">
+    <div class="stars"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <header class="hud-header" *ngIf="gs.gameState === 'playing'">
+    <div class="hud-box score-box">
+      <label>SCORE</label>
+      <div class="value">{{ gs.score }}</div>
+      <div class="combo" *ngIf="gs.combo > 1">{{ gs.combo }}x COMBO</div>
+    </div>
+
+    <div class="timer-orb">
+      <svg viewBox="0 0 100 100">
+        <circle class="bg" cx="50" cy="50" r="45"></circle>
+        <circle class="progress" cx="50" cy="50" r="45" 
+                [style.stroke-dashoffset]="283 - (gs.timeLeft / 60 * 283)"></circle>
+      </svg>
+      <div class="time-text">{{ gs.timeLeft }}</div>
+    </div>
+
+    <div class="hud-box stats-box">
+      <div class="stat">LIVES: <span class="lives-icons">
+        <span *ngFor="let l of [1,2,3]" [class.lost]="l > gs.lives">▲</span>
+      </span></div>
+      <div class="stat">ACCURACY: <span>{{ gs.accuracy }}%</span></div>
+    </div>
+  </header>
+
+  <main class="battlefield">
+    <div class="word-node" *ngFor="let w of gs.words"
+         [style.left.%]="w.x" [style.top.%]="w.y"
+         [class.locked]="w.locked" [class.exploding]="w.exploding" [class.shaking]="w.shaking"
+         [style.--word-color]="w.color">
+      <span class="char" *ngFor="let char of w.text.split(''); let i = index"
+            [class.typed]="i < w.typedIndex">{{ char }}</span>
+      <div class="lock-bracket" *ngIf="w.locked"></div>
+    </div>
+
+    <div class="bullet" *ngFor="let b of gs.bullets"
+         [style.left.%]="getBulletX(b)" [style.top.%]="getBulletY(b)"
+         [style.background]="b.color">
+      <span class="bullet-char">{{ b.letter }}</span>
+    </div>
+
+    <div class="particle" *ngFor="let p of gs.particles"
+         [style.left.%]="p.x" [style.top.%]="p.y"
+         [style.background]="p.color" [style.width.px]="p.size"
+         [style.height.px]="p.size"></div>
+  </main>
+
+  <footer class="weapon-system">
+    <div class="sniper-base">
+      <div class="turret" [style.transform]="'rotate(' + sniperAngle + 'deg)'" [class.recoil]="isRecoil">
+        <div class="barrel">
+          <div class="muzzle-flash" *ngIf="muzzleFlash"></div>
+        </div>
+        <div class="scope"></div>
+      </div>
+    </div>
+    
+    <div class="target-bar" *ngIf="gs.gameState === 'playing'">
+      <span class="label">READY</span>
+      <div class="scan-line"></div>
+    </div>
+  </footer>
+
+  <div class="screen-overlay" *ngIf="gs.gameState !== 'playing'">
+    <div class="terminal-card">
+      <h1 *ngIf="gs.gameState === 'idle'">TYPEDYNAMICS: SNIPER</h1>
+      <h1 *ngIf="gs.gameState === 'gameover'">MISSION COMPLETE</h1>
+      
+      <div class="stats-grid" *ngIf="gs.gameState === 'gameover'">
+        <div class="s-item"><span>SCORE</span><strong>{{ gs.score }}</strong></div>
+        <div class="s-item"><span>ACCURACY</span><strong>{{ gs.accuracy }}%</strong></div>
+        <div class="s-item"><span>LEVEL</span><strong>{{ gs.getLevelName() }}</strong></div>
+      </div>
+
+      <button class="btn-primary" (click)="gs.startGame()">INITIALIZE MISSION</button>
+    </div>
+  </div>
+</div>
