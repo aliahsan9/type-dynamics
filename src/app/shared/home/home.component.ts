@@ -17,6 +17,6 @@ export class HomeComponent {
   }
 
   practiceMode() {
-    this.router.navigate(['/practice']);
+    this.router.navigate(['/keyboard']);
   }
 }

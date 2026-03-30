@@ -56,9 +56,8 @@ export class KeyboardInputComponent implements OnInit, OnDestroy {
       this.startTime = Date.now();
       this.elapsedSeconds = 0;
       this.timerInterval = setInterval(() => {
-        this.elapsedSeconds = Math.floor((Date.now() - this.startTime) / 1000);
-        this.calculateStats();
-      }, 500);
+  this.elapsedSeconds = Math.floor((Date.now() - this.startTime) / 1000);
+}, 1000);
     }
 
     const prevLen = this.userInput.length;

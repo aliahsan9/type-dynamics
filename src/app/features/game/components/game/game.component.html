@@ -1,4 +1,4 @@
-<div class="game-container" [class.shake]="screenShake">
+<div class="game-shell">
 
   <!-- 🌌 BACKGROUND -->
   <div class="space-bg">
@@ -8,12 +8,12 @@
 
   <!-- 🧠 HUD -->
   <header class="hud-header" *ngIf="gs.gameState === 'playing'">
-    
-    <div class="hud-box">
-      <label>SCORE</label>
-      <div class="value">{{ gs.score }}</div>
+
+    <div class="hud-box left">
+      <div class="label">SCORE</div>
+      <div class="value neon">{{ gs.score }}</div>
       <div class="combo" *ngIf="gs.combo > 1">
-        {{ gs.combo }}x COMBO
+        {{ gs.combo }}x COMBO ⚡
       </div>
     </div>
 
@@ -28,14 +28,15 @@
       <div class="time-text">{{ gs.timeLeft }}</div>
     </div>
 
-    <div class="hud-box">
-      <div>LIVES: {{ gs.lives }}</div>
-      <div>ACC: {{ gs.accuracy }}%</div>
+    <div class="hud-box right">
+      <div>❤️ {{ gs.lives }}</div>
+      <div>🎯 {{ gs.accuracy }}%</div>
+      <div class="level">{{ gs.getLevelName() }}</div>
     </div>
 
   </header>
 
-  <!-- ⚔️ BATTLEFIELD -->
+  <!-- ⚔️ GAME AREA -->
   <main class="battlefield">
 
     <!-- WORDS -->
@@ -44,6 +45,7 @@
          [style.left.%]="w.x"
          [style.top.%]="w.y"
          [class.locked]="w.locked"
+         [class.exploding]="w.exploding"
          [style.--word-color]="w.color">
 
       <span *ngFor="let c of w.text.split(''); let i = index"
@@ -51,7 +53,6 @@
             [class.typed]="i < w.typedIndex">
         {{ c }}
       </span>
-
     </div>
 
     <!-- BULLETS -->
@@ -59,16 +60,22 @@
          *ngFor="let b of gs.bullets"
          [style.left.%]="getBulletX(b)"
          [style.top.%]="getBulletY(b)">
-
       {{ b.letter }}
+    </div>
 
+    <!-- FLOATING TEXT -->
+    <div class="floating-text"
+         *ngFor="let f of gs.floatingTexts"
+         [style.left.%]="f.x"
+         [style.top.%]="f.y"
+         [style.color]="f.color">
+      {{ f.text }}
     </div>
 
   </main>
 
   <!-- 🔫 SNIPER -->
   <footer class="weapon-system">
-
     <div class="sniper-base">
       <div class="turret"
            [style.transform]="'rotate(' + sniperAngle + 'deg)'"
@@ -80,21 +87,20 @@
 
       </div>
     </div>
-
   </footer>
 
-  <!-- 🎮 START / GAME OVER -->
+  <!-- 🎮 OVERLAY -->
   <div class="screen-overlay" *ngIf="gs.gameState !== 'playing'">
-
     <div class="terminal-card">
+
       <h1 *ngIf="gs.gameState === 'idle'">TYPE SNIPER</h1>
       <h1 *ngIf="gs.gameState === 'gameover'">MISSION COMPLETE</h1>
 
       <button (click)="gs.startGame()" class="btn-primary">
-        START GAME
+        ▶ START MISSION
       </button>
-    </div>
 
+    </div>
   </div>
 
 </div>

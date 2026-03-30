@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Inter:wght@300;400;600&display=swap');
+
+.privacy-wrapper {
+  font-family: 'Inter', sans-serif;
+  background: #020617;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+/* HERO (Fix navbar overlap here) */
+.privacy-hero {
+  min-height: 40vh;
+  padding-top: 120px; /* 🔥 FIX: pushes content below navbar */
+  padding-bottom: 40px;
+
+  background: linear-gradient(135deg, #020617, #0f172a);
+}
+
+.title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+
+  background: linear-gradient(90deg, #38bdf8, #22c55e);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  max-width: 700px;
+  margin: 15px auto 0;
+  color: #94a3b8;
+  font-size: 1.1rem;
+
+  span {
+    color: #22c55e;
+    font-weight: 600;
+  }
+}
+
+/* CONTENT */
+.privacy-content {
+  background: #020617;
+}
+
+/* CARDS */
+.privacy-card {
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 20px;
+
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: 0.3s ease;
+
+  h3 {
+    color: #38bdf8;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #cbd5e1;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    background: rgba(56,189,248,0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+}
+
+/* CTA */
+.cta-text {
+  color: #22c55e;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.btn-main {
+  margin-top: 10px;
+  padding: 12px 30px;
+  border-radius: 40px;
+  border: none;
+  font-weight: 600;
+
+  background: linear-gradient(135deg, #38bdf8, #22c55e);
+  color: #000;
+
+  transition: 0.3s ease;
+}
+
+.btn-main:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(34,197,94,0.5);
+}
+
+/* RESPONSIVE FIXES */
+@media (max-width: 992px) {
+  .title { font-size: 2.5rem; }
+}
+
+@media (max-width: 768px) {
+  .privacy-hero {
+    padding-top: 100px; /* adjust for smaller navbar */
+  }
+
+  .title { font-size: 2.2rem; }
+  .subtitle { font-size: 1rem; }
+}
+
+@media (max-width: 576px) {
+  .privacy-hero {
+    padding-top: 90px;
+  }
+
+  .title { font-size: 1.9rem; }
+  .privacy-card { padding: 18px; }
+}

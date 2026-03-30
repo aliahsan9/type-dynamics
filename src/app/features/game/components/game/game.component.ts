@@ -56,17 +56,19 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   // 🎯 SMART AIM (LOCK TARGET)
-  updateSniperAim() {
-    const target = this.gs.words.find(w => w.id === this.gs.lockedWordId);
+ updateSniperAim() {
+  const target = this.gs.words.find(w => w.id === this.gs.lockedWordId);
 
-    if (target) {
-      const dx = target.x - 50;
-      const dy = target.y - 95;
-      this.sniperAngle = Math.atan2(dx, -dy) * (180 / Math.PI);
-    } else {
-      this.sniperAngle = 0;
-    }
+  if (target) {
+    const dx = target.x - 50;
+    const dy = target.y - 95;
+
+    const targetAngle = Math.atan2(dx, -dy) * (180 / Math.PI);
+
+    // smooth interpolation 👇
+    this.sniperAngle += (targetAngle - this.sniperAngle) * 0.2;
   }
+}
 
   // 🔥 WEAPON FX
   triggerWeaponFX() {
