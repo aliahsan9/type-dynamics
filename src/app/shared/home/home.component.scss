@@ -25,6 +25,7 @@
               radial-gradient(circle at 80% 70%, #7c5cff 0%, transparent 40%);
   animation: moveBg 20s linear infinite;
   opacity: 0.2;
+    pointer-events: none;
 }
 
 @keyframes moveBg {

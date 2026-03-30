@@ -16,7 +16,7 @@ export class GameComponent implements OnInit, OnDestroy {
   muzzleFlash = false;
   screenShake = false;
 
-  private shootAudio = new Audio('assets/shoot.mp3');
+  private shootAudio = new Audio('assets/shoot1.mp3');
 
   constructor(public gs: GameService) {}
 
