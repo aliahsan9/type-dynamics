@@ -10,7 +10,6 @@ import { TopOnlineTypingGamesComponent } from './core/blogs/top-online-typing-ga
 import { TypingChallengeComponent } from './core/blogs/typing-challenge/typing-challenge.component';
 import { TypingGameComponent } from './core/blogs/typing-game/typing-game.component';
 import { ContactComponent } from './shared/contact/contact.component';
-import { ProjectileComponent } from './features/game/components/projectile/projectile.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -23,6 +22,5 @@ export const routes: Routes = [
     {path: 'top-online-typing-games', component: TopOnlineTypingGamesComponent},
     {path: 'typing-challenge', component: TypingChallengeComponent},
     {path: 'typing-game', component: TypingGameComponent}, 
-    {path: 'projectile', component: ProjectileComponent}, 
     {path: 'contact', component: ContactComponent}
 ];
