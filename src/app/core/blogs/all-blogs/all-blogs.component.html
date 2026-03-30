@@ -1,13 +1,17 @@
-<div class="container my-5">
-  <h2 class="text-center mb-4">Our Latest Blogs</h2>
-  <div class="row g-4">
-    <div class="col-md-6 col-lg-4" *ngFor="let blog of blogs">
-      <div class="card blog-card h-100 shadow-sm">
-        <img [src]="blog.thumbnail" class="card-img-top" alt="{{ blog.title }}" />
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title">{{ blog.title }}</h5>
-          <p class="card-date text-muted">{{ blog.publishedDate | date:'mediumDate' }}</p>
-          <a [routerLink]="blog.link" class="btn btn-primary mt-auto">Read More</a>
+<div class="all-blogs-page py-5">
+  <div class="container">
+    <h2 class="text-center mb-5">Our Latest Blogs</h2>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4" *ngFor="let blog of blogs">
+        <div class="card blog-card h-100 shadow-lg">
+          <div class="blog-img-wrapper">
+            <img [src]="blog.thumbnail" class="card-img-top" alt="{{ blog.title }}" />
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">{{ blog.title }}</h5>
+            <p class="card-date text-light">{{ blog.publishedDate | date:'mediumDate' }}</p>
+            <a [routerLink]="blog.link" class="btn btn-primary mt-auto">Read More</a>
+          </div>
         </div>
       </div>
     </div>
