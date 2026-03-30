@@ -1,45 +1,112 @@
-<div class="container mt-5">
-  <div class="card shadow-lg p-4">
+<div class="game-wrap">
 
-    <h3 class="text-center mb-3">Typing Practice</h3>
+  <!-- Header bar -->
+  <div class="top-bar">
+    <div class="brand">⌨ TypeStrike</div>
 
-    <div class="paragraph-box mb-3">
-      <span *ngFor="let item of getHighlightedText()" [ngClass]="item.class">
-        {{item.char}}
-      </span>
+    <div class="difficulty-tabs">
+      <button *ngFor="let d of difficulty"
+              [class.active]="difficulty === d"
+              (click)="setDifficulty(difficulty)">
+        {{ d | titlecase }}
+      </button>
     </div>
 
-   <textarea
-  #typingInput
-  class="form-control typing-box"
-  rows="4"
-  [value]="userInput"
-  (input)="onInputChange(typingInput.value)"
-  placeholder="Start typing here...">
-</textarea>
-
-    <div class="stats row text-center mt-4">
-      <div class="col-md-3">
-        <h5>WPM</h5>
-        <p>{{wpm}}</p>
-      </div>
-      <div class="col-md-3">
-        <h5>Accuracy</h5>
-        <p>{{accuracy}}%</p>
-      </div>
-      <div class="col-md-3">
-        <h5>Typed</h5>
-        <p>{{totalTyped}}</p>
-      </div>
-      <div class="col-md-3">
-        <h5>Correct</h5>
-        <p>{{correctChars}}</p>
-      </div>
+    <div class="best-badge">
+      <span class="label">Best</span>
+      <span class="value">{{ bestWpm }} WPM</span>
     </div>
-
-    <div class="text-center mt-3">
-      <button class="btn btn-primary" (click)="reset()">Restart</button>
-    </div>
-
   </div>
+
+  <!-- Score & lives -->
+  <div class="hud">
+    <div class="hud-item score-block">
+      <div class="hud-label">Score</div>
+      <div class="hud-value glow-text">{{ score }}</div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-label">Combo</div>
+      <div class="hud-value combo-val" [class.hot]="combo >= 10">
+        ×{{ comboMultiplier }} <span class="combo-count">({{ combo }})</span>
+      </div>
+    </div>
+    <div class="hud-item lives-block">
+      <div class="hud-label">Lives</div>
+      <div class="lives-row">
+        <span *ngFor="let l of livesArray" class="heart" [class.lost]="l >= lives">♥</span>
+      </div>
+    </div>
+    <div class="hud-item">
+      <div class="hud-label">Time</div>
+      <div class="hud-value">{{ elapsedSeconds }}s</div>
+    </div>
+  </div>
+
+  <!-- Main text area -->
+  <div class="text-stage">
+    <div class="paragraph-box" [class.finished]="isFinished">
+      <span *ngFor="let item of getHighlightedText()" [class]="'char ' + item.class">{{ item.char }}</span>
+    </div>
+
+    <!-- Floating particles -->
+    <div class="particle" *ngFor="let p of particles"
+         [style.left.%]="p.x" [style.top.%]="p.y">+{{ comboMultiplier * 10 }}</div>
+
+    <!-- Progress bar -->
+    <div class="progress-track">
+      <div class="progress-fill" [style.width.%]="progressPercent"></div>
+    </div>
+  </div>
+
+  <!-- Textarea -->
+  <textarea *ngIf="!isFinished"
+    #typingInput
+    class="typing-input"
+    [value]="userInput"
+    (input)="onInputChange(typingInput.value)"
+    placeholder="Start typing to begin the challenge..."
+    rows="3"
+    autocomplete="off"
+    autocorrect="off"
+    autocapitalize="off"
+    spellcheck="false">
+  </textarea>
+
+  <!-- Stats row -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-val">{{ wpm }}</div>
+      <div class="stat-label">WPM</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">{{ accuracy }}%</div>
+      <div class="stat-label">Accuracy</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">{{ correctChars }}</div>
+      <div class="stat-label">Correct</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">{{ maxCombo }}</div>
+      <div class="stat-label">Max Combo</div>
+    </div>
+  </div>
+
+  <!-- Finish overlay -->
+  <div class="finish-overlay" *ngIf="isFinished">
+    <div class="finish-card">
+      <div class="finish-title" [class.new-record]="wpm >= bestWpm && wpm > 0">
+        {{ lives === 0 ? '💀 Game Over' : '🏆 Complete!' }}
+      </div>
+      <div class="finish-stats">
+        <div><span>WPM</span><strong>{{ wpm }}</strong></div>
+        <div><span>Accuracy</span><strong>{{ accuracy }}%</strong></div>
+        <div><span>Score</span><strong>{{ score }}</strong></div>
+        <div><span>Max Combo</span><strong>{{ maxCombo }}</strong></div>
+      </div>
+      <div class="new-record-badge" *ngIf="wpm >= bestWpm && wpm > 0">⚡ New Record!</div>
+      <button class="retry-btn" (click)="reset()">Play Again</button>
+    </div>
+  </div>
+
 </div>

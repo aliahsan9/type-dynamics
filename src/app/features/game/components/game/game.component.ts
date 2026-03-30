@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { GameService, Word, Bullet } from '../../services/game.service';
+import { GameService, Bullet } from '../../services/game.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,33 +10,56 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit, OnDestroy {
+
   sniperAngle = 0;
   isRecoil = false;
   muzzleFlash = false;
   screenShake = false;
 
+  private shootAudio = new Audio('assets/shoot.mp3');
+
   constructor(public gs: GameService) {}
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this.shootAudio.volume = 0.4;
+  }
 
+  // 🎯 KEY INPUT SYSTEM (NO INPUT FIELD)
   @HostListener('window:keydown', ['$event'])
   handleInput(event: KeyboardEvent) {
     if (this.gs.gameState !== 'playing') return;
     if (event.key.length !== 1) return;
 
-    const result = this.gs.handleKeyPress(event.key.toLowerCase());
-    
+    const key = event.key.toLowerCase();
+
+    const result = this.gs.handleKeyPress(key);
+
     if (result === 'hit' || result === 'complete') {
-      this.triggerWeaponFX();
+      this.fireWeapon();
       this.updateSniperAim();
-      if (result === 'complete') this.triggerShake();
+    }
+
+    if (result === 'complete') {
+      this.triggerShake();
     }
   }
 
+  // 🔫 FIRE SYSTEM (Sound + FX)
+  fireWeapon() {
+    this.playShootSound();
+    this.triggerWeaponFX();
+  }
+
+  playShootSound() {
+    this.shootAudio.currentTime = 0;
+    this.shootAudio.play().catch(() => {});
+  }
+
+  // 🎯 SMART AIM (LOCK TARGET)
   updateSniperAim() {
     const target = this.gs.words.find(w => w.id === this.gs.lockedWordId);
+
     if (target) {
-      // Calculate angle from bottom-center (50, 95) to target (x, y)
       const dx = target.x - 50;
       const dy = target.y - 95;
       this.sniperAngle = Math.atan2(dx, -dy) * (180 / Math.PI);
@@ -45,24 +68,33 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
+  // 🔥 WEAPON FX
   triggerWeaponFX() {
     this.isRecoil = true;
     this.muzzleFlash = true;
+
     setTimeout(() => {
       this.isRecoil = false;
       this.muzzleFlash = false;
-    }, 100);
+    }, 80);
   }
 
+  // 💥 SCREEN SHAKE (ON WORD DESTROY)
   triggerShake() {
     this.screenShake = true;
-    setTimeout(() => this.screenShake = false, 300);
+    setTimeout(() => this.screenShake = false, 250);
   }
 
-  getBulletX(b: Bullet) { return b.startX + (b.targetX - b.startX) * b.progress; }
-  getBulletY(b: Bullet) { return b.startY + (b.targetY - b.startY) * b.progress; }
+  // 🚀 BULLET POSITION
+  getBulletX(b: Bullet) {
+    return b.startX + (b.targetX - b.startX) * b.progress;
+  }
 
-  ngOnDestroy() {
+  getBulletY(b: Bullet) {
+    return b.startY + (b.targetY - b.startY) * b.progress;
+  }
+
+  ngOnDestroy(): void {
     this.gs.endGame();
   }
 }
