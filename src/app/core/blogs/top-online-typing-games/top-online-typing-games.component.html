@@ -1,1 +1,29 @@
-<p>top-online-typing-games works!</p>
+<!-- top-online-typing-games.component.html -->
+<div class="container my-5 blog-container">
+  <div class="text-center mb-5">
+    <h1 class="blog-title">{{ blogTitle }}</h1>
+    <p class="text-muted">By {{ author }} | {{ blogDate }}</p>
+    <img src="assets/images/blog-header-typing-games.jpg" alt="Top Online Typing Games" class="img-fluid rounded mt-3">
+  </div>
+
+  <div *ngFor="let game of games" class="card mb-4 shadow-sm blog-card">
+    <div class="row g-0 align-items-center">
+      <div class="col-md-4">
+        <img [src]="game.image" class="img-fluid rounded-start" [alt]="game.title">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h4 class="card-title">{{ game.title }}</h4>
+          <p class="card-text">{{ game.description }}</p>
+          <a *ngIf="game.link" [href]="game.link" target="_blank" class="btn btn-outline-primary">Play Now</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-5">
+    <h3>Start Mastering Your Typing Skills!</h3>
+    <p>Try these games daily to improve your speed, accuracy, and finger coordination. Consistency is key!</p>
+    <a href="/game" class="btn btn-primary btn-lg">Practice Typing Now</a>
+  </div>
+</div>

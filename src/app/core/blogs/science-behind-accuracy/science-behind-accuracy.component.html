@@ -1,1 +1,28 @@
-<p>science-behind-accuracy works!</p>
+<!-- science-behind-accuracy.component.html -->
+<div class="container my-5 blog-container">
+  <div class="text-center mb-5">
+    <h1 class="blog-title">{{ blogTitle }}</h1>
+    <p class="text-muted">By {{ author }} | {{ blogDate }}</p>
+    <img src="assets/images/blog-header-science.jpg" alt="Typing Accuracy Brain Science" class="img-fluid rounded mt-3">
+  </div>
+
+  <div *ngFor="let section of sections" class="card mb-4 shadow-sm blog-card">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img [src]="section.image" class="img-fluid rounded-start" [alt]="section.title">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h4 class="card-title">{{ section.title }}</h4>
+          <p class="card-text">{{ section.content }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-5">
+    <h3>Unlock Your Brain’s Potential!</h3>
+    <p>Practice accurate typing consistently and notice improvements in both speed and cognitive performance.</p>
+    <a href="/game" class="btn btn-primary btn-lg">Start Typing Practice Now</a>
+  </div>
+</div>
