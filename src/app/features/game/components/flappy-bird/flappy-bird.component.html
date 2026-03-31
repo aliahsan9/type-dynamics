@@ -1,0 +1,51 @@
+<div class="flappy-container">
+  
+  <div class="game-wrapper">
+    
+    <!-- Canvas -->
+    <canvas #gameCanvas class="game-canvas"></canvas>
+
+    <!-- Control hints -->
+    <div class="controls-overlay" [class.fade-out]="!showControls">
+      <div class="control-item">
+        <span class="key">SPACE</span>
+        <span class="action">Jump</span>
+      </div>
+      <div class="control-item">
+        <span class="key">P</span>
+        <span class="action">Pause</span>
+      </div>
+      <div class="control-item">
+        <span class="key">M</span>
+        <span class="action">Mute</span>
+      </div>
+    </div>
+
+    <!-- Stats panel -->
+    <div class="stats-panel">
+      <div class="stat">
+        <div class="stat-label">High Score</div>
+        <div class="stat-value">{{ game.highScore }}</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Max Combo</div>
+        <div class="stat-value">{{ game.maxCombo }}</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p class="hint">
+      <span class="icon">🐦</span>
+      Tap, Click or Press <strong>SPACE</strong> to flap
+    </p>
+    <div class="badges">
+      <span class="badge" *ngIf="game.achievements.score10">🏅 Score 10</span>
+      <span class="badge" *ngIf="game.achievements.score25">🥈 Score 25</span>
+      <span class="badge" *ngIf="game.achievements.score50">🥇 Score 50</span>
+    </div>
+  </div>
+
+</div>

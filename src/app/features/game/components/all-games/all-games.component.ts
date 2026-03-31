@@ -41,9 +41,9 @@ export class AllGamesComponent {
     },
     {
       id: 4,
-      title: 'Speed Typing',
-      thumbnail: 'assets/games/typing.webp',
-      route: '/keyboard'
+      title: 'Flappy Bird',
+      thumbnail: 'assets/games/flappy.webp',
+      route: '/flappy-bird'
     }
    
   ];

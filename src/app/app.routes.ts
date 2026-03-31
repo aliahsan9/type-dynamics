@@ -12,12 +12,14 @@ import { TypingGameComponent } from './core/blogs/typing-game/typing-game.compon
 import { ContactComponent } from './shared/contact/contact.component';
 import { SnakeGameComponent } from './features/game/components/snake-game/snake-game.component';
 import { AllGamesComponent } from './features/game/components/all-games/all-games.component';
+import { FlappyBirdComponent } from './features/game/components/flappy-bird/flappy-bird.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
     {path: 'all-games', component: AllGamesComponent},
     {path: 'game', component: GameComponent},
     {path: 'snake-game', component: SnakeGameComponent},
+    {path: 'flappy-bird', component: FlappyBirdComponent},
     {path: 'keyboard', component: KeyboardInputComponent},
     {path: 'privacy', component: PrivacyComponent},
     {path: 'typing-blogs', component: AllBlogsComponent},
