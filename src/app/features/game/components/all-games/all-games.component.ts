@@ -45,7 +45,6 @@ export class AllGamesComponent {
       thumbnail: 'assets/games/flappy.webp',
       route: '/flappy-bird'
     }
-   
   ];
 
   playGame(route: string) {
