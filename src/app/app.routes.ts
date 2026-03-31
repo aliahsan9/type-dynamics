@@ -10,10 +10,12 @@ import { TopOnlineTypingGamesComponent } from './core/blogs/top-online-typing-ga
 import { TypingChallengeComponent } from './core/blogs/typing-challenge/typing-challenge.component';
 import { TypingGameComponent } from './core/blogs/typing-game/typing-game.component';
 import { ContactComponent } from './shared/contact/contact.component';
+import { SnakeGameComponent } from './features/game/components/snake-game/snake-game.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
     {path: 'game', component: GameComponent},
+    {path: 'snake-game', component: SnakeGameComponent},
     {path: 'keyboard', component: KeyboardInputComponent},
     {path: 'privacy', component: PrivacyComponent},
     {path: 'typing-blogs', component: AllBlogsComponent},
