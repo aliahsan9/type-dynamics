@@ -1,0 +1,90 @@
+/* 🌌 PAGE BACKGROUND */
+.games-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a192f, #020c1b);
+  color: #fff;
+  margin-top: 50px;
+}
+
+/* 🎯 TITLE */
+.page-title {
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #64ffda;
+}
+
+/* 🎮 GAME CARD */
+.game-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.08);
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  }
+}
+
+/* 🖼️ THUMBNAIL */
+.thumb-wrapper {
+  height: 160px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
+}
+
+/* 📝 CARD BODY */
+.card-body {
+  padding: 15px;
+}
+
+/* 🎯 TITLE */
+.game-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* 🔥 BUTTON */
+.play-btn {
+  background: linear-gradient(45deg, #00c6ff, #0072ff);
+  border: none;
+  color: white;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(45deg, #00e6a8, #00c6ff);
+    transform: scale(1.05);
+  }
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .thumb-wrapper {
+    height: 140px;
+  }
+}
+
+@media (max-width: 576px) {
+  .thumb-wrapper {
+    height: 120px;
+  }
+}

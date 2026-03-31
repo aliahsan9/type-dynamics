@@ -1,0 +1,34 @@
+<div class="game-wrapper text-center">
+
+  <h1 class="title">🐍 Neon Snake</h1>
+
+  <div class="hud">
+    <div>Score: {{ game.score }}</div>
+    <div>Speed: {{ 200 - game.speed }}</div>
+  </div>
+
+  <!-- BOARD -->
+  <div class="board"
+       (touchstart)="onTouchStart($event)"
+       (touchend)="onTouchEnd($event)">
+
+    <div *ngFor="let row of gridArray; let y = index; trackBy: trackByFn" class="row">
+
+      <div *ngFor="let col of gridArray; let x = index; trackBy: trackByFn"
+           class="cell"
+           [ngClass]="{
+             snake: isSnake(x, y),
+             food: isFood(x, y)
+           }">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div *ngIf="game.gameOver" class="overlay">
+    <h2>💀 Game Over</h2>
+    <button class="btn btn-glow" (click)="restart()">Play Again</button>
+  </div>
+
+</div>
