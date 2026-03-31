@@ -1,4 +1,11 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { GameService, Bullet } from '../../services/game.service';
 import { CommonModule } from '@angular/common';
 
@@ -11,27 +18,57 @@ import { CommonModule } from '@angular/common';
 })
 export class GameComponent implements OnInit, OnDestroy {
 
+  @ViewChild('mobileInput') mobileInput!: ElementRef<HTMLInputElement>;
+
   sniperAngle = 0;
-  isRecoil = false;
   muzzleFlash = false;
-  screenShake = false; 
+  screenShake = false;
 
   private shootAudio = new Audio('assets/shoot.mp3');
 
   constructor(public gs: GameService) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.shootAudio.volume = 0.4;
   }
 
-  // 🎯 KEY INPUT SYSTEM (NO INPUT FIELD)
+  // 🚀 START GAME + FOCUS INPUT
+  startGame() {
+    this.gs.startGame();
+
+    setTimeout(() => {
+      this.focusInput();
+    }, 200);
+  }
+
+  // 🎯 FORCE KEYBOARD OPEN
+  focusInput() {
+    this.mobileInput?.nativeElement.focus();
+  }
+
+  // 📱 MOBILE INPUT HANDLER
+  onMobileInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    if (!input.value) return;
+
+    const key = input.value.slice(-1).toLowerCase();
+    input.value = ''; // clear instantly
+
+    this.processKey(key);
+  }
+
+  // 💻 DESKTOP KEYBOARD
   @HostListener('window:keydown', ['$event'])
-  handleInput(event: KeyboardEvent) {
+  handleKeyboard(event: KeyboardEvent) {
     if (this.gs.gameState !== 'playing') return;
     if (event.key.length !== 1) return;
 
-    const key = event.key.toLowerCase();
+    this.processKey(event.key.toLowerCase());
+  }
 
+  // 🧠 UNIFIED INPUT PROCESSOR
+  processKey(key: string) {
     const result = this.gs.handleKeyPress(key);
 
     if (result === 'hit' || result === 'complete') {
@@ -44,50 +81,31 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 🔫 FIRE SYSTEM (Sound + FX)
+  // 🔫 FIRE
   fireWeapon() {
-    this.playShootSound();
-    this.triggerWeaponFX();
-  }
-
-  playShootSound() {
     this.shootAudio.currentTime = 0;
     this.shootAudio.play().catch(() => {});
+
+    this.muzzleFlash = true;
+    setTimeout(() => this.muzzleFlash = false, 80);
   }
 
-  // 🎯 SMART AIM (LOCK TARGET)
- updateSniperAim() {
-  const target = this.gs.words.find(w => w.id === this.gs.lockedWordId);
+  updateSniperAim() {
+    const target = this.gs.words.find(w => w.id === this.gs.lockedWordId);
+    if (!target) return;
 
-  if (target) {
     const dx = target.x - 50;
     const dy = target.y - 95;
+    const angle = Math.atan2(dx, -dy) * (180 / Math.PI);
 
-    const targetAngle = Math.atan2(dx, -dy) * (180 / Math.PI);
-
-    // smooth interpolation 👇
-    this.sniperAngle += (targetAngle - this.sniperAngle) * 0.2;
-  }
-}
-
-  // 🔥 WEAPON FX
-  triggerWeaponFX() {
-    this.isRecoil = true;
-    this.muzzleFlash = true;
-
-    setTimeout(() => {
-      this.isRecoil = false;
-      this.muzzleFlash = false;
-    }, 80);
+    this.sniperAngle += (angle - this.sniperAngle) * 0.25;
   }
 
-  // 💥 SCREEN SHAKE (ON WORD DESTROY)
   triggerShake() {
     this.screenShake = true;
     setTimeout(() => this.screenShake = false, 250);
   }
 
-  // 🚀 BULLET POSITION
   getBulletX(b: Bullet) {
     return b.startX + (b.targetX - b.startX) * b.progress;
   }
@@ -96,7 +114,7 @@ export class GameComponent implements OnInit, OnDestroy {
     return b.startY + (b.targetY - b.startY) * b.progress;
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.gs.endGame();
   }
 }
