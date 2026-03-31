@@ -32,7 +32,7 @@ export class GameComponent implements OnInit, OnDestroy {
     this.shootAudio.volume = 0.4;
   }
 
-  // START GAME + FOCUS INPUT
+  // START GAME + FOCUS INPUT Here
   startGame() {
     this.gs.startGame();
 
