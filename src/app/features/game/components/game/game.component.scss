@@ -2,30 +2,47 @@ $neon-green: #00ff88;
 $neon-blue: #00d4ff;
 $bg-dark: #020b12;
 
-/* 🧱 FIX NAVBAR OVERLAP */
+/* 🔑 HIDDEN INPUT (MOBILE KEYBOARD TRIGGER) */
+.hidden-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 🧱 MAIN SHELL */
 .game-shell {
   width: 100%;
-  height: 100vh;
-  padding-top: 70px; // 👈 adjust to your navbar height
+  height: 100dvh; // ✅ mobile fix
+  padding-top: 70px;
   position: relative;
   overflow: hidden;
-  background: radial-gradient(circle, #0a0f2c, #000);
+  background: radial-gradient(circle at center, #0a0f2c, #000);
+
+  &.shake {
+    animation: shake 0.25s;
+  }
 }
 
 /* 🌌 BACKGROUND */
 .space-bg {
   position: absolute;
   inset: 0;
-  z-index: 0; 
+  z-index: 0;
 
   .stars {
-    background: url('/assets/images/stars.webp');
+    position: absolute;
+    inset: 0;
+    background: url('/assets/images/stars.webp') repeat;
     animation: moveStars 60s linear infinite;
+    opacity: 0.6;
   }
 
   .grid-overlay {
-    background: linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 }
@@ -38,61 +55,70 @@ $bg-dark: #020b12;
 /* 🧠 HUD */
 .hud-header {
   position: absolute;
-  top: 70px; // 👈 safe below navbar
+  top: 70px;
   width: 100%;
-  padding: 10px 30px;
+  padding: 10px 15px;
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
   z-index: 10;
 }
 
 .hud-box {
+  flex: 1;
+  text-align: center;
   backdrop-filter: blur(10px);
   background: rgba(0,0,0,0.4);
   border: 1px solid $neon-blue;
-  padding: 12px 20px;
+  padding: 10px;
   border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+  font-size: clamp(12px, 2.5vw, 14px);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
 
   .value.neon {
     color: $neon-green;
-    text-shadow: 0 0 10px $neon-green;
-  }
-
-  .combo {
-    color: orange;
-    animation: pulse 0.6s infinite alternate;
+    text-shadow: 0 0 8px $neon-green;
   }
 }
 
-@keyframes pulse {
-  from { transform: scale(1); }
-  to { transform: scale(1.1); }
+/* ⏱ TIMER */
+.timer-orb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(16px, 4vw, 22px);
+  color: white;
+  text-shadow: 0 0 10px $neon-blue;
+}
+
+/* ⚔️ GAME AREA */
+.battlefield {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
 }
 
 /* ⚔️ WORDS */
 .word-node {
   position: absolute;
-  color: white;
   transform: translate(-50%, -50%);
-  font-size: 1.4rem;
-  padding: 6px 12px;
+  color: white;
+  font-size: clamp(14px, 3.2vw, 22px);
+  padding: 6px 10px;
   border-bottom: 2px solid var(--word-color);
   transition: all 0.2s ease;
 
   &.locked {
-    box-shadow: 0 0 15px var(--word-color);
     transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 12px var(--word-color);
   }
 
-  &.exploding {
-    opacity: 0;
-    transform: scale(1.5);
+  span {
+    transition: all 0.15s;
   }
 
-  .char.typed {
+  .typed {
     color: var(--word-color);
-    text-shadow: 0 0 10px var(--word-color);
+    text-shadow: 0 0 8px var(--word-color);
   }
 }
 
@@ -102,62 +128,49 @@ $bg-dark: #020b12;
   transform: translate(-50%, -50%);
   color: $neon-green;
   font-weight: bold;
+  font-size: clamp(12px, 2.5vw, 16px);
   text-shadow: 0 0 10px $neon-green;
   animation: bulletPop 0.2s ease;
 }
 
 @keyframes bulletPop {
-  from { transform: scale(0.3); opacity: 0; }
+  from { transform: scale(0.4); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
 
-/* 💥 FLOAT TEXT */
-.floating-text {
-  position: absolute;
-  font-weight: bold;
-  animation: floatUp 1s ease forwards;
-}
-
-@keyframes floatUp {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-40px); }
-}
-
-/* 🔫 SNIPER */
+/* 🔫 SNIPER SYSTEM */
 .weapon-system {
   position: absolute;
-  bottom: 20px;
+  bottom: 15px;
   width: 100%;
   display: flex;
   justify-content: center;
+  z-index: 10;
 }
 
 .sniper-base {
-  width: 70px;
-  height: 40px;
+  width: clamp(40px, 10vw, 70px);
+  height: 35px;
   background: #111;
   border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.6);
 
   .turret {
     width: 6px;
-    height: 70px;
+    height: clamp(50px, 12vw, 70px);
     background: linear-gradient(#777, #333);
     transform-origin: bottom center;
     transition: transform 0.1s ease;
 
-    &.recoil {
-      transform: translateY(6px);
-    }
-
     .muzzle-flash {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       background: orange;
       border-radius: 50%;
       position: absolute;
-      top: -12px;
-      left: -4px;
-      box-shadow: 0 0 25px orange;
+      top: -10px;
+      left: -3px;
+      box-shadow: 0 0 20px orange;
     }
   }
 }
@@ -171,28 +184,53 @@ $bg-dark: #020b12;
   justify-content: center;
   align-items: center;
   z-index: 20;
+}
 
-  .terminal-card {
-    border: 1px solid $neon-blue;
-    padding: 50px;
-    text-align: center;
-    box-shadow: 0 0 30px rgba(0,212,255,0.4);
+.terminal-card {
+  border: 1px solid $neon-blue;
+  padding: clamp(25px, 5vw, 50px);
+  text-align: center;
+  box-shadow: 0 0 25px rgba(0,212,255,0.4);
+
+  h1 {
+    color: white;
+    margin-bottom: 20px;
   }
 }
 
-/* BUTTON */
+/* 🔘 BUTTON */
 .btn-primary {
-  margin-top: 20px;
   border: 1px solid $neon-green;
   padding: 12px 25px;
   background: transparent;
   color: $neon-green;
   cursor: pointer;
   transition: all 0.2s;
+  font-size: clamp(14px, 3vw, 16px);
 
   &:hover {
     background: $neon-green;
     color: black;
-    box-shadow: 0 0 15px $neon-green;
+    box-shadow: 0 0 12px $neon-green;
   }
+}
+
+/* 📱 MOBILE TUNING */
+@media (max-width: 768px) {
+  .hud-header {
+    top: 65px;
+  }
+
+  .weapon-system {
+    bottom: 10px;
+  }
+}
+
+/* 💥 SCREEN SHAKE */
+@keyframes shake {
+  0% { transform: translate(0); }
+  25% { transform: translate(-3px, 2px); }
+  50% { transform: translate(3px, -2px); }
+  75% { transform: translate(-2px, 1px); }
+  100% { transform: translate(0); }
 }
