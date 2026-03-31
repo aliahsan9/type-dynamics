@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { FooterComponent } from "./shared/footer/footer.component";
 import { NavbarComponent } from "./shared/navbar/navbar.component";
 import { NavigationEnd, Router, RouterModule } from "@angular/router";
 
@@ -8,7 +7,7 @@ declare var gtag: Function;
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FooterComponent, NavbarComponent, RouterModule],
+  imports: [NavbarComponent, RouterModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'] 
 })

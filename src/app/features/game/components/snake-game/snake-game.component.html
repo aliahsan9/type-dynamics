@@ -1,4 +1,4 @@
-<div class="game-wrapper text-center">
+<div class="game-wrapper">
 
   <h1 class="title">🐍 Neon Snake</h1>
 
@@ -7,28 +7,26 @@
     <div>Speed: {{ 200 - game.speed }}</div>
   </div>
 
-  <!-- BOARD -->
-  <div class="board"
-       (touchstart)="onTouchStart($event)"
-       (touchend)="onTouchEnd($event)">
+  <!-- 🧠 BOARD -->
+  <div #boardRef
+       class="board"
+       (touchstart)="onTouch($event)">
 
     <div *ngFor="let row of gridArray; let y = index; trackBy: trackByFn" class="row">
 
       <div *ngFor="let col of gridArray; let x = index; trackBy: trackByFn"
            class="cell"
-           [ngClass]="{
-             snake: isSnake(x, y),
-             food: isFood(x, y)
-           }">
+           [class.snake]="isSnake(x, y)"
+           [class.food]="isFood(x, y)">
       </div>
 
     </div>
   </div>
 
-  <!-- GAME OVER -->
+  <!-- 💀 GAME OVER -->
   <div *ngIf="game.gameOver" class="overlay">
     <h2>💀 Game Over</h2>
-    <button class="btn btn-glow" (click)="restart()">Play Again</button>
+    <button class="btn-glow" (click)="restart()">Play Again</button>
   </div>
 
 </div>

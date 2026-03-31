@@ -12,7 +12,7 @@ $bg-dark: #020b12;
 /* 🧱 MAIN SHELL */
 .game-shell {
   width: 100%;
-  height: 100dvh; // ✅ mobile fix
+  height: 100dvh; // mobile fix
   padding-top: 70px;
   position: relative;
   overflow: hidden;
@@ -29,15 +29,7 @@ $bg-dark: #020b12;
   inset: 0;
   z-index: 0;
 
-  .stars {
-    position: absolute;
-    inset: 0;
-    background: url('/assets/images/stars.webp') repeat;
-    animation: moveStars 60s linear infinite;
-    opacity: 0.6;
-  }
-
-  .grid-overlay {
+   .grid-overlay {
     position: absolute;
     inset: 0;
     background:
@@ -45,11 +37,6 @@ $bg-dark: #020b12;
       linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
     background-size: 40px 40px;
   }
-}
-
-@keyframes moveStars {
-  from { transform: translateY(0); }
-  to { transform: translateY(1000px); }
 }
 
 /* 🧠 HUD */

@@ -1,7 +1,9 @@
 import {
   Component,
+  ElementRef,
   HostListener,
-  OnInit
+  OnInit,
+  ViewChild
 } from '@angular/core';
 import { SnakeGameService } from '../../services/snake-game.service';
 import { CommonModule } from '@angular/common';
@@ -15,10 +17,9 @@ import { CommonModule } from '@angular/common';
 })
 export class SnakeGameComponent implements OnInit {
 
-  gridArray: number[] = [];
+  @ViewChild('boardRef') boardRef!: ElementRef;
 
-  touchStartX = 0;
-  touchStartY = 0;
+  gridArray: number[] = [];
 
   constructor(public game: SnakeGameService) {}
 
@@ -27,7 +28,7 @@ export class SnakeGameComponent implements OnInit {
     this.game.startGame();
   }
 
-  // FIXED (moved logic from HTML)
+  /* 🧠 HELPERS */
   isSnake(x: number, y: number): boolean {
     return this.game.snake.some(s => s.x === x && s.y === y);
   }
@@ -36,6 +37,7 @@ export class SnakeGameComponent implements OnInit {
     return this.game.food?.x === x && this.game.food?.y === y;
   }
 
+  /* 💻 DESKTOP CONTROL */
   @HostListener('window:keydown', ['$event'])
   handleKey(event: KeyboardEvent) {
     const map: any = {
@@ -50,23 +52,31 @@ export class SnakeGameComponent implements OnInit {
     }
   }
 
-  // mobile swipe
-  onTouchStart(e: TouchEvent) {
-    this.touchStartX = e.touches[0].clientX;
-    this.touchStartY = e.touches[0].clientY;
-  }
+  /* 📱 TAP ANYWHERE CONTROL (MAIN FEATURE) */
+  onTouch(event: TouchEvent) {
+    const touch = event.touches[0];
 
-  onTouchEnd(e: TouchEvent) {
-    const dx = e.changedTouches[0].clientX - this.touchStartX;
-    const dy = e.changedTouches[0].clientY - this.touchStartY;
+    const rect = this.boardRef.nativeElement.getBoundingClientRect();
 
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const dx = touch.clientX - centerX;
+    const dy = touch.clientY - centerY;
+
+    // Decide direction based on tap position
     if (Math.abs(dx) > Math.abs(dy)) {
-      this.game.changeDirection(dx > 0 ? { x: 1, y: 0 } : { x: -1, y: 0 });
+      this.game.changeDirection(dx > 0
+        ? { x: 1, y: 0 }
+        : { x: -1, y: 0 });
     } else {
-      this.game.changeDirection(dy > 0 ? { x: 0, y: 1 } : { x: 0, y: -1 });
+      this.game.changeDirection(dy > 0
+        ? { x: 0, y: 1 }
+        : { x: 0, y: -1 });
     }
   }
 
+  /* 🔄 RESTART */
   restart() {
     this.game.startGame();
   }
