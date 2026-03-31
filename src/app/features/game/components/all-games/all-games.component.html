@@ -1,0 +1,67 @@
+<div class="games-page">
+
+  <div class="container py-5">
+
+    <!-- 🔥 HEADER -->
+    <div class="text-center mb-5">
+      <h2 class="page-title">Explore All Games</h2>
+      <p class="text-light subtitle">
+        Choose a game and start improving your skills 
+      </p>
+    </div>
+
+    <!-- 🎮 GAMES GRID -->
+    <div class="row g-4">
+
+      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6" *ngFor="let game of games">
+
+        <!-- CARD -->
+        <div class="game-card h-100 d-flex flex-column">
+
+          <!-- 🖼️ THUMB -->
+          <div class="thumb-wrapper">
+            <img 
+              [src]="game.thumbnail" 
+              [alt]="game.title"
+              class="img-fluid"
+              loading="lazy"
+            >
+          </div>
+
+          <!-- 📦 BODY -->
+          <div class="card-body text-center d-flex flex-column justify-content-between">
+
+            <!-- TITLE -->
+            <h5 class="game-title mb-2">
+              {{ game.title }}
+            </h5>
+
+            <!-- OPTIONAL TAG -->
+            <span class="badge game-badge mb-3">
+              Popular
+            </span>
+
+            <!-- BUTTON -->
+            <a 
+              class="btn play-btn mt-auto"
+              [routerLink]="game.route"
+            >
+              ▶ Play Now
+            </a>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 🚀 EMPTY STATE (optional future use) -->
+    <div *ngIf="games.length === 0" class="text-center mt-5">
+      <p>No games available yet 😢</p>
+    </div>
+
+  </div>
+
+</div>
