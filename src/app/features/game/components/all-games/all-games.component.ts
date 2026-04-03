@@ -27,13 +27,7 @@ export class AllGamesComponent {
       thumbnail: 'assets/games/typing.webp',
       route: '/keyboard'
     },
-    {
-      id: 2,
-      title: 'Snake Game',
-      thumbnail: 'assets/games/snake.webp',
-      route: '/snake-game'
-    }, 
-    {
+        {
       id: 3,
       title: 'Word Battle',
       thumbnail: 'assets/games/word.webp',
