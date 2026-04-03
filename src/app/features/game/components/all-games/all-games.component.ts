@@ -20,19 +20,20 @@ export class AllGamesComponent {
 
   constructor(private router: Router) {}
 
-  games: Game[] = [
-    {
+  games: Game[] = [ 
+     {
       id: 1,
-      title: 'Typing Master',
-      thumbnail: 'assets/games/typing.webp',
-      route: '/keyboard'
-    },
-        {
-      id: 3,
       title: 'Word Battle',
       thumbnail: 'assets/games/word.webp',
       route: '/game'
+    },
+    {
+      id: 2,
+      title: 'Typing Master',
+      thumbnail: 'assets/games/typing.webp',
+      route: '/keyboard'
     }
+      
   ];
 
   playGame(route: string) {
