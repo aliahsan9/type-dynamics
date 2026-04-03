@@ -23,22 +23,18 @@ export class GameComponent implements OnInit, OnDestroy {
   sniperAngle = 0;
   muzzleFlash = false;
   screenShake = false;
-
-  private shootAudio = new Audio('assets/shoot.mp3');
+  shooterRecoil = false; // NEW: Shooter animation
 
   constructor(public gs: GameService) {}
 
   ngOnInit() {
-    this.shootAudio.volume = 0.4;
+    // Preload sounds in assets folder
   }
 
-  // START GAME + FOCUS INPUT Here
+  // START GAME + FOCUS INPUT
   startGame() {
     this.gs.startGame();
-
-    setTimeout(() => {
-      this.focusInput();
-    }, 200);
+    setTimeout(() => this.focusInput(), 200);
   }
 
   // 🎯 FORCE KEYBOARD OPEN
@@ -49,7 +45,6 @@ export class GameComponent implements OnInit, OnDestroy {
   // 📱 MOBILE INPUT HANDLER
   onMobileInput(event: Event) {
     const input = event.target as HTMLInputElement;
-
     if (!input.value) return;
 
     const key = input.value.slice(-1).toLowerCase();
@@ -81,13 +76,15 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  // 🔫 FIRE
+  // 🔫 FIRE WEAPON
   fireWeapon() {
-    this.shootAudio.currentTime = 0;
-    this.shootAudio.play().catch(() => {});
-
+    // Muzzle flash
     this.muzzleFlash = true;
     setTimeout(() => this.muzzleFlash = false, 80);
+
+    // Shooter recoil animation
+    this.shooterRecoil = true;
+    setTimeout(() => this.shooterRecoil = false, 100);
   }
 
   updateSniperAim() {
@@ -106,12 +103,21 @@ export class GameComponent implements OnInit, OnDestroy {
     setTimeout(() => this.screenShake = false, 250);
   }
 
+  // Calculate bullet position (missile trajectory)
   getBulletX(b: Bullet) {
     return b.startX + (b.targetX - b.startX) * b.progress;
   }
 
   getBulletY(b: Bullet) {
-    return b.startY + (b.targetY - b.startY) * b.progress;
+    // Add some arc/curve to the missile
+    const baseY = b.startY + (b.targetY - b.startY) * b.progress;
+    const arc = Math.sin(b.progress * Math.PI) * 3; // Slight arc
+    return baseY - arc;
+  }
+
+  // Get rotation for spinning meme missiles
+  getBulletRotation(b: Bullet) {
+    return b.rotation;
   }
 
   ngOnDestroy() {

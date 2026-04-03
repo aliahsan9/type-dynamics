@@ -1,56 +1,94 @@
 <nav class="nav-container" [class.scrolled]="isScrolled">
-
   <div class="nav-inner">
-
+    
     <!-- Logo -->
-    <a class="logo" routerLink="/">
+    <a class="logo" routerLink="/" (click)="closeMenu()">
       <span class="logo-main">Type</span>
       <span class="logo-accent">Dynamics</span>
     </a>
 
-    <!-- Desktop Menu -->
+    <!-- Desktop Navigation -->
     <ul class="nav-links">
-      <li><a routerLink="/">Home</a></li>
-      <li><a routerLink="/game">Play</a></li>
-      <li><a routerLink="/all-games">Games</a></li>
-      <li><a routerLink="/keyboard">Practice</a></li>
-      <li><a routerLink="/typing-blogs">Blogs</a></li>
-      <li><a routerLink="/privacy">Privacy</a></li>
-      <li><a routerLink="/contact">Contact</a></li>
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+      <li><a routerLink="/game" routerLinkActive="active">Play</a></li>
+      <li><a routerLink="/all-games" routerLinkActive="active">Games</a></li>
+      <li><a routerLink="/keyboard" routerLinkActive="active">Practice</a></li>
+      <li><a routerLink="/typing-blogs" routerLinkActive="active">Blogs</a></li>
+      <li><a routerLink="/privacy" routerLinkActive="active">Privacy</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
     </ul>
 
-    <!-- CTA -->
-    <button class="cta-btn" routerLink="/game">
-      Start Now 
+    <!-- Desktop CTA Button -->
+    <button class="cta-btn desktop-cta" routerLink="/game">
+      <span class="cta-text">Start Now</span>
+      <span class="cta-icon">→</span>
     </button>
 
-    <!-- Hamburger -->
-    <div class="hamburger" (click)="toggleMenu()" [class.active]="isMenuOpen">
+    <!-- Hamburger Menu Toggle -->
+    <button 
+      class="hamburger" 
+      (click)="toggleMenu()" 
+      [class.active]="isMenuOpen"
+      [attr.aria-label]="isMenuOpen ? 'Close menu' : 'Open menu'"
+      [attr.aria-expanded]="isMenuOpen">
       <span></span>
       <span></span>
       <span></span>
+    </button>
+
+  </div>
+
+  <!-- Mobile Sidebar Menu -->
+  <div class="mobile-menu" [class.open]="isMenuOpen">
+    <div class="mobile-menu-header">
+      <span class="menu-title">Menu</span>
+      <button class="close-btn" (click)="closeMenu()" aria-label="Close menu">
+        <span>×</span>
+      </button>
     </div>
 
-  </div>
+    <nav class="mobile-nav-links">
+      <a routerLink="/" (click)="closeMenu()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <span class="link-icon">🏠</span>
+        <span>Home</span>
+      </a>
+      <a routerLink="/game" (click)="closeMenu()" routerLinkActive="active">
+        <span class="link-icon">🎮</span>
+        <span>Play</span>
+      </a>
+      <a routerLink="/all-games" (click)="closeMenu()" routerLinkActive="active">
+        <span class="link-icon">🎯</span>
+        <span>Games</span>
+      </a>
+      <a routerLink="/keyboard" (click)="closeMenu()" routerLinkActive="active">
+        <span class="link-icon">⌨️</span>
+        <span>Practice</span>
+      </a>
+      <a routerLink="/typing-blogs" (click)="closeMenu()" routerLinkActive="active">
+        <span class="link-icon">📝</span>
+        <span>Blogs</span>
+      </a>
+      <a routerLink="/privacy" (click)="closeMenu()" routerLinkActive="active">
+        <span class="link-icon">🔒</span>
+        <span>Privacy</span>
+      </a>
+      <a routerLink="/contact" (click)="closeMenu()" routerLinkActive="active">
+        <span class="link-icon">✉️</span>
+        <span>Contact</span>
+      </a>
+    </nav>
 
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" [class.open]="isMenuOpen">
-
-    <a routerLink="/" (click)="closeMenu()">Home</a>
-    <a routerLink="/game" (click)="closeMenu()">Play</a>
-    <a routerLink="/all-games" (click)="closeMenu()">Games</a>
-    <a routerLink="/keyboard" (click)="closeMenu()">Practice</a>
-    <a routerLink="/typing-blogs" (click)="closeMenu()">Blogs</a>
-    <a routerLink="/privacy" (click)="closeMenu()">Privacy</a>
-    <a routerLink="/contact" (click)="closeMenu()">Contact</a>
-
-    <button class="cta-btn full" routerLink="/game" (click)="closeMenu()">
-      Start Now 
+    <button class="cta-btn mobile-cta" routerLink="/game" (click)="closeMenu()">
+      <span>Start Now</span>
+      <span class="cta-icon">→</span>
     </button>
-
   </div>
 
-  <!-- Overlay -->
-  <div class="overlay" *ngIf="isMenuOpen" (click)="closeMenu()"></div>
+  <!-- Backdrop Overlay -->
+  <div 
+    class="overlay" 
+    *ngIf="isMenuOpen" 
+    (click)="closeMenu()"
+    [@fadeInOut]></div>
 
 </nav>
