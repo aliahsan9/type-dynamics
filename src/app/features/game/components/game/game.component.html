@@ -13,6 +13,7 @@
   <!-- 🌌 BACKGROUND -->
   <div class="space-bg">
     <div class="grid-overlay"></div>
+    <div class="stars"></div>
   </div>
 
   <!-- 🧠 HUD -->
@@ -28,7 +29,8 @@
     </div>
 
     <div class="hud-box">
-      ❤️ {{ gs.lives }} | 🎯 {{ gs.accuracy }}%
+      <div class="label">💪 {{ gs.getLevelName() }}</div>
+      <div class="stats">❤️ {{ gs.lives }} | 🎯 {{ gs.accuracy }}% | 🔥 x{{ gs.combo }}</div>
     </div>
 
   </header>
@@ -36,50 +38,176 @@
   <!-- ⚔️ GAME AREA -->
   <main class="battlefield" (click)="focusInput()">
 
-    <!-- WORDS -->
+    <!-- WORDS WITH MEMES! -->
     <div class="word-node"
          *ngFor="let w of gs.words"
          [style.left.%]="w.x"
          [style.top.%]="w.y"
          [class.locked]="w.locked"
+         [class.shaking]="w.shaking"
+         [class.exploding]="w.exploding"
          [style.--word-color]="w.color">
 
-      <span *ngFor="let c of w.text.split(''); let i = index"
-            [class.typed]="i < w.typedIndex">
-        {{ c }}
-      </span>
+      <!-- MEME IMAGE/VIDEO -->
+      <div class="meme-container">
+        <img *ngIf="w.memeType === 'image'" 
+             [src]="w.memeUrl" 
+             class="meme-img"
+             alt="meme" />
+        
+        <video *ngIf="w.memeType === 'video'" 
+               [src]="w.memeUrl" 
+               class="meme-video"
+               autoplay
+               loop
+               muted
+               playsinline></video>
+      </div>
+
+      <!-- WORD TEXT -->
+      <div class="word-text">
+        <span *ngFor="let c of w.text.split(''); let i = index"
+              [class.typed]="i < w.typedIndex">
+          {{ c }}
+        </span>
+      </div>
     </div>
 
-    <!-- BULLETS -->
-    <div class="bullet"
+    <!-- MEME MISSILES! -->
+    <div class="meme-missile"
          *ngFor="let b of gs.bullets"
          [style.left.%]="getBulletX(b)"
-         [style.top.%]="getBulletY(b)">
-      {{ b.letter }}
+         [style.top.%]="getBulletY(b)"
+         [style.transform]="'translate(-50%, -50%) rotate(' + getBulletRotation(b) + 'deg)'">
+      
+      <img [src]="b.memeUrl" class="missile-meme" alt="missile" />
+      
+      <!-- Letter indicator -->
+      <div class="missile-letter" [style.color]="b.color">{{ b.letter }}</div>
+      
+      <!-- Missile trail -->
+      <div class="missile-trail"></div>
+    </div>
+
+    <!-- PARTICLES (Sparks & Meme Fragments) -->
+    <div class="particle"
+         *ngFor="let p of gs.particles"
+         [style.left.%]="p.x"
+         [style.top.%]="p.y"
+         [style.opacity]="p.life / p.maxLife">
+      
+      <div *ngIf="p.type === 'spark' || p.type === 'ember'"
+           class="spark"
+           [style.background]="p.color"
+           [style.width.px]="p.size"
+           [style.height.px]="p.size">
+      </div>
+
+      <img *ngIf="p.type === 'meme-fragment'"
+           [src]="p.memeUrl"
+           class="meme-fragment"
+           [style.width.px]="p.size"
+           [style.height.px]="p.size"
+           alt="fragment" />
+    </div>
+
+    <!-- FLOATING TEXTS -->
+    <div class="floating-text"
+         *ngFor="let ft of gs.floatingTexts"
+         [style.left.%]="ft.x"
+         [style.top.%]="ft.y"
+         [style.color]="ft.color"
+         [style.opacity]="ft.life / 100">
+      {{ ft.text }}
     </div>
 
   </main>
 
-  <!-- 🔫 SNIPER -->
+  <!-- 🔫 AK-47 SHOOTER! -->
   <footer class="weapon-system">
-    <div class="sniper-base">
-      <div class="turret"
-           [style.transform]="'rotate(' + sniperAngle + 'deg)'">
-        <div class="barrel">
-          <div class="muzzle-flash" *ngIf="muzzleFlash"></div>
+    
+    <!-- Shooter character with AK-47 -->
+    <div class="shooter-container" [class.recoil]="shooterRecoil">
+      
+      <!-- AK-47 Gun -->
+      <div class="ak47-gun" [style.transform]="'rotate(' + sniperAngle + 'deg)'">
+        <img src="https://i.imgur.com/YjKZx3L.png" 
+             class="gun-sprite" 
+             alt="AK-47" />
+        
+        <!-- Muzzle Flash -->
+        <div class="muzzle-flash" *ngIf="muzzleFlash">
+          <img src="https://i.imgur.com/xK5QHVN.gif" alt="flash" />
         </div>
       </div>
+
+      <!-- Shooter Person -->
+      <div class="shooter-body">
+        <img src="https://i.imgur.com/8KpZqLc.gif" 
+             class="shooter-sprite" 
+             alt="shooter" />
+      </div>
     </div>
+
   </footer>
 
-  <!-- 🎮 OVERLAY -->
+  <!-- 🎮 OVERLAY SCREENS -->
   <div class="screen-overlay" *ngIf="gs.gameState !== 'playing'">
     <div class="terminal-card">
-      <h1>TYPE SNIPER</h1>
+      
+      <div *ngIf="gs.gameState === 'idle'">
+        <h1>🎯 MEME SNIPER 💥</h1>
+        <p class="subtitle">Shoot the memes before they escape!</p>
+        
+        <div class="instructions">
+          <p>Type the words to fire meme missiles!</p>
+          <p>Complete combos for EPIC explosions! 🔥</p>
+        </div>
 
-      <button (click)="startGame()" class="btn-primary">
-        ▶ START
-      </button>
+        <button (click)="startGame()" class="btn-primary">
+          ▶ START SHOOTING
+        </button>
+      </div>
+
+      <div *ngIf="gs.gameState === 'gameover'">
+        <h1>💀 GAME OVER 💀</h1>
+        
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">SCORE</div>
+            <div class="stat-value neon">{{ gs.score }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">HIGH SCORE</div>
+            <div class="stat-value gold">{{ gs.highScore }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">MEMES DESTROYED</div>
+            <div class="stat-value">{{ gs.wordsDestroyed }}</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">MAX COMBO</div>
+            <div class="stat-value">{{ gs.maxCombo }}x</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">ACCURACY</div>
+            <div class="stat-value">{{ gs.accuracy }}%</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">RANK</div>
+            <div class="stat-value">{{ gs.getLevelName() }}</div>
+          </div>
+        </div>
+
+        <button (click)="startGame()" class="btn-primary">
+          🔄 PLAY AGAIN
+        </button>
+
+        <div class="share-prompt">
+          Share with friends and challenge them! 😎
+        </div>
+      </div>
+
     </div>
   </div>
 

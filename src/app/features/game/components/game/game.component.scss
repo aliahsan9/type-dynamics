@@ -1,5 +1,6 @@
 $neon-green: #00ff88;
 $neon-blue: #00d4ff;
+$neon-gold: #ffd700;
 $bg-dark: #020b12;
 
 /* 🔑 HIDDEN INPUT (MOBILE KEYBOARD TRIGGER) */
@@ -12,7 +13,7 @@ $bg-dark: #020b12;
 /* 🧱 MAIN SHELL */
 .game-shell {
   width: 100%;
-  height: 100dvh; // mobile fix
+  height: 100dvh;
   padding-top: 70px;
   position: relative;
   overflow: hidden;
@@ -29,14 +30,31 @@ $bg-dark: #020b12;
   inset: 0;
   z-index: 0;
 
-   .grid-overlay {
+  .grid-overlay {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,255,255,0.05) 1px, transparent 1px);
+      linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
   }
+
+  .stars {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(2px 2px at 20% 30%, white, transparent),
+      radial-gradient(2px 2px at 60% 70%, white, transparent),
+      radial-gradient(1px 1px at 50% 50%, white, transparent),
+      radial-gradient(1px 1px at 80% 10%, white, transparent);
+    background-size: 200% 200%;
+    animation: twinkle 4s ease-in-out infinite;
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 /* 🧠 HUD */
@@ -54,16 +72,28 @@ $bg-dark: #020b12;
   flex: 1;
   text-align: center;
   backdrop-filter: blur(10px);
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   border: 1px solid $neon-blue;
   padding: 10px;
   border-radius: 10px;
   font-size: clamp(12px, 2.5vw, 14px);
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
 
+  .label {
+    font-size: clamp(10px, 2vw, 12px);
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+
   .value.neon {
     color: $neon-green;
     text-shadow: 0 0 8px $neon-green;
+    font-weight: bold;
+    font-size: clamp(14px, 3vw, 18px);
+  }
+
+  .stats {
+    font-size: clamp(10px, 2vw, 12px);
   }
 }
 
@@ -75,6 +105,7 @@ $bg-dark: #020b12;
   font-size: clamp(16px, 4vw, 22px);
   color: white;
   text-shadow: 0 0 10px $neon-blue;
+  font-weight: bold;
 }
 
 /* ⚔️ GAME AREA */
@@ -84,121 +115,379 @@ $bg-dark: #020b12;
   z-index: 5;
 }
 
-/* ⚔️ WORDS */
+/* 🎭 WORD NODE WITH MEME */
 .word-node {
   position: absolute;
   transform: translate(-50%, -50%);
-  color: white;
-  font-size: clamp(14px, 3.2vw, 22px);
-  padding: 6px 10px;
-  border-bottom: 2px solid var(--word-color);
   transition: all 0.2s ease;
 
   &.locked {
-    transform: translate(-50%, -50%) scale(1.1);
-    box-shadow: 0 0 12px var(--word-color);
+    transform: translate(-50%, -50%) scale(1.15);
+    filter: drop-shadow(0 0 15px var(--word-color));
+    
+    .meme-container {
+      animation: pulse 0.5s infinite;
+    }
   }
 
-  span {
-    transition: all 0.15s;
+  &.shaking {
+    animation: wordShake 0.2s;
   }
 
-  .typed {
-    color: var(--word-color);
-    text-shadow: 0 0 8px var(--word-color);
+  &.exploding {
+    animation: explode 0.4s ease-out forwards;
+  }
+
+  .meme-container {
+    width: clamp(60px, 15vw, 100px);
+    height: clamp(60px, 15vw, 100px);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid var(--word-color);
+    box-shadow: 0 0 10px var(--word-color);
+    margin-bottom: 8px;
+
+    .meme-img,
+    .meme-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .word-text {
+    text-align: center;
+    font-size: clamp(14px, 3.2vw, 20px);
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+
+    span {
+      transition: all 0.15s;
+      
+      &.typed {
+        color: var(--word-color);
+        text-shadow: 0 0 8px var(--word-color);
+        transform: scale(1.1);
+        display: inline-block;
+      }
+    }
   }
 }
 
-/* 🔫 BULLETS */
-.bullet {
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes wordShake {
+  0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+  25% { transform: translate(-50%, -50%) rotate(-5deg); }
+  75% { transform: translate(-50%, -50%) rotate(5deg); }
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* 🚀 MEME MISSILES! */
+.meme-missile {
   position: absolute;
-  transform: translate(-50%, -50%);
-  color: $neon-green;
+  z-index: 6;
+  pointer-events: none;
+
+  .missile-meme {
+    width: clamp(40px, 10vw, 60px);
+    height: clamp(40px, 10vw, 60px);
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    animation: missileGlow 0.3s infinite;
+    pointer-events: none;
+  }
+
+  .missile-letter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(16px, 4vw, 24px);
+    font-weight: bold;
+    text-shadow: 
+      0 0 5px #000,
+      0 0 10px currentColor,
+      0 0 15px currentColor;
+    pointer-events: none;
+  }
+
+  .missile-trail {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 30px;
+    background: linear-gradient(to bottom, 
+      rgba(255, 100, 0, 0.8), 
+      rgba(255, 200, 0, 0.4),
+      transparent);
+    filter: blur(2px);
+    animation: trailFlicker 0.1s infinite;
+  }
+}
+
+@keyframes missileGlow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(255, 255, 255, 1);
+  }
+}
+
+@keyframes trailFlicker {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* 💥 PARTICLES */
+.particle {
+  position: absolute;
+  z-index: 7;
+  pointer-events: none;
+
+  .spark {
+    border-radius: 50%;
+    box-shadow: 0 0 5px currentColor;
+  }
+
+  .meme-fragment {
+    object-fit: cover;
+    border-radius: 5px;
+    animation: fragmentSpin 1s linear infinite;
+  }
+}
+
+@keyframes fragmentSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 🎨 FLOATING TEXT */
+.floating-text {
+  position: absolute;
+  font-size: clamp(16px, 4vw, 24px);
   font-weight: bold;
-  font-size: clamp(12px, 2.5vw, 16px);
-  text-shadow: 0 0 10px $neon-green;
-  animation: bulletPop 0.2s ease;
+  text-shadow: 
+    0 0 10px currentColor,
+    2px 2px 4px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 8;
+  animation: floatUp 1s ease-out;
 }
 
-@keyframes bulletPop {
-  from { transform: scale(0.4); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+@keyframes floatUp {
+  from {
+    transform: translateY(0) scale(0.5);
+  }
+  to {
+    transform: translateY(-20px) scale(1);
+  }
 }
 
-/* 🔫 SNIPER SYSTEM */
+/* 🔫 AK-47 WEAPON SYSTEM */
 .weapon-system {
   position: absolute;
   bottom: 15px;
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: flex-end;
   z-index: 10;
 }
 
-.sniper-base {
-  width: clamp(40px, 10vw, 70px);
-  height: 35px;
-  background: #111;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+.shooter-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.1s;
 
-  .turret {
-    width: 6px;
-    height: clamp(50px, 12vw, 70px);
-    background: linear-gradient(#777, #333);
-    transform-origin: bottom center;
-    transition: transform 0.1s ease;
+  &.recoil {
+    animation: recoil 0.1s;
+  }
+
+  .ak47-gun {
+    position: relative;
+    transform-origin: center bottom;
+    transition: transform 0.2s ease;
+    margin-bottom: -20px;
+    z-index: 2;
+
+    .gun-sprite {
+      width: clamp(80px, 20vw, 150px);
+      height: auto;
+      filter: drop-shadow(0 0 10px rgba(255, 100, 0, 0.5));
+    }
 
     .muzzle-flash {
-      width: 12px;
-      height: 12px;
-      background: orange;
-      border-radius: 50%;
       position: absolute;
-      top: -10px;
-      left: -3px;
-      box-shadow: 0 0 20px orange;
+      top: 10%;
+      right: -10px;
+      width: 40px;
+      height: 40px;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
     }
   }
+
+  .shooter-body {
+    position: relative;
+    z-index: 1;
+
+    .shooter-sprite {
+      width: clamp(60px, 15vw, 100px);
+      height: auto;
+      filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.5));
+    }
+  }
+}
+
+@keyframes recoil {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
 }
 
 /* 🎮 OVERLAY */
 .screen-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.92);
+  background: rgba(0, 0, 0, 0.92);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 20;
+  backdrop-filter: blur(5px);
 }
 
 .terminal-card {
-  border: 1px solid $neon-blue;
+  border: 2px solid $neon-blue;
   padding: clamp(25px, 5vw, 50px);
   text-align: center;
-  box-shadow: 0 0 25px rgba(0,212,255,0.4);
+  box-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
+  background: rgba(10, 15, 44, 0.9);
+  border-radius: 15px;
+  max-width: 90%;
+  pointer-events: none;
 
   h1 {
     color: white;
     margin-bottom: 20px;
+    font-size: clamp(24px, 6vw, 48px);
+    text-shadow: 0 0 10px $neon-blue;
+  }
+
+  .subtitle {
+    color: $neon-green;
+    font-size: clamp(14px, 3vw, 18px);
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px $neon-green;
+  }
+
+  .instructions {
+    margin: 20px 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: clamp(12px, 2.5vw, 16px);
+    
+    p {
+      margin: 10px 0;
+    }
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 25px 0;
+
+    .stat-item {
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 8px;
+
+      .stat-label {
+        font-size: clamp(10px, 2vw, 12px);
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 5px;
+      }
+
+      .stat-value {
+        font-size: clamp(16px, 4vw, 24px);
+        font-weight: bold;
+        color: white;
+
+        &.neon {
+          color: $neon-green;
+          text-shadow: 0 0 10px $neon-green;
+        }
+
+        &.gold {
+          color: $neon-gold;
+          text-shadow: 0 0 10px $neon-gold;
+        }
+      }
+    }
+  }
+
+  .share-prompt {
+    margin-top: 20px;
+    font-size: clamp(12px, 2.5vw, 14px);
+    color: $neon-gold;
+    text-shadow: 0 0 5px $neon-gold;
   }
 }
 
 /* 🔘 BUTTON */
 .btn-primary {
-  border: 1px solid $neon-green;
-  padding: 12px 25px;
+  border: 2px solid $neon-green;
+  padding: 15px 30px;
   background: transparent;
   color: $neon-green;
   cursor: pointer;
-  transition: all 0.2s;
-  font-size: clamp(14px, 3vw, 16px);
+  transition: all 0.3s;
+  font-size: clamp(14px, 3vw, 18px);
+  font-weight: bold;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 10px;
 
   &:hover {
     background: $neon-green;
     color: black;
-    box-shadow: 0 0 12px $neon-green;
+    box-shadow: 0 0 20px $neon-green;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 }
 
@@ -211,13 +500,17 @@ $bg-dark: #020b12;
   .weapon-system {
     bottom: 10px;
   }
+
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* 💥 SCREEN SHAKE */
 @keyframes shake {
   0% { transform: translate(0); }
-  25% { transform: translate(-3px, 2px); }
-  50% { transform: translate(3px, -2px); }
-  75% { transform: translate(-2px, 1px); }
-  100% { transform: translate(0); }
+  25% { transform: translate(-5px, 3px) rotate(-1deg); }
+  50% { transform: translate(5px, -3px) rotate(1deg); }
+  75% { transform: translate(-3px, 2px) rotate(-0.5deg); }
+  100% { transform: translate(0) rotate(0); }
 }
