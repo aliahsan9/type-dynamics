@@ -11,13 +11,11 @@ import { TypingChallengeComponent } from './core/blogs/typing-challenge/typing-c
 import { TypingGameComponent } from './core/blogs/typing-game/typing-game.component';
 import { ContactComponent } from './shared/contact/contact.component';
 import { AllGamesComponent } from './features/game/components/all-games/all-games.component';
-import { FlappyBirdComponent } from './features/game/components/flappy-bird/flappy-bird.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
     {path: 'all-games', component: AllGamesComponent},
     {path: 'game', component: GameComponent},
-    {path: 'flappy-bird', component: FlappyBirdComponent},
     {path: 'keyboard', component: KeyboardInputComponent},
     {path: 'privacy', component: PrivacyComponent},
     {path: 'typing-blogs', component: AllBlogsComponent},

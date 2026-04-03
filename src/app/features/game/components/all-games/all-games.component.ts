@@ -32,12 +32,6 @@ export class AllGamesComponent {
       title: 'Word Battle',
       thumbnail: 'assets/games/word.webp',
       route: '/game'
-    },
-    {
-      id: 4,
-      title: 'Flappy Bird',
-      thumbnail: 'assets/games/flappy.webp',
-      route: '/flappy-bird'
     }
   ];
 
