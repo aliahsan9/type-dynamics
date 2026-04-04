@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
   isScrolled = false;
 
   ngOnInit(): void {
-    // Prevent body scroll when menu is open on mobile
+    // Prevent body scroll when menu is open on mobile now
     this.updateBodyScroll();
   }
 
