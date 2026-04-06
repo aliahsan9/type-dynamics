@@ -1,0 +1,9 @@
+User-agent: * 
+Allow: /
+
+Sitemap: https://type-dynamics.vercel.app/sitemap.xml
+
+Disallow: /api/ 
+Disallow: /admin/ 
+Disallow: /.json$ 
+Disallow: /?*
