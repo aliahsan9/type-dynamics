@@ -10,7 +10,7 @@ import { AllBlogsComponent } from '../../core/blogs/all-blogs/all-blogs.componen
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-// Added connstructor here for routing
+
   constructor(private router: Router) {}
 
   startGame() {
